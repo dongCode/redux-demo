@@ -11,7 +11,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   const response = await client.get('/fakeApi/posts')
   return response.data
 })
-
+console.dir(fetchPosts, 'fetchPosts')
 export const addNewPost = createAsyncThunk(
   'posts/addNewPost',
   async (initialPost) => {
