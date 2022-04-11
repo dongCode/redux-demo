@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk,createSelector } from '@reduxjs/toolkit'
 import { client } from '../../api/client'
 
 const initialState = {
@@ -11,7 +11,7 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async () => {
   const response = await client.get('/fakeApi/posts')
   return response.data
 })
-console.dir(fetchPosts, 'fetchPosts')
+
 export const addNewPost = createAsyncThunk(
   'posts/addNewPost',
   async (initialPost) => {
@@ -64,7 +64,12 @@ export const { postAdded, postUpdated, reactionAdded } = postsSlice.actions
 
 export default postsSlice.reducer
 // useSelector(selector) 选择指定的state
-export const selectAllPosts = (state) => state.posts.posts
+export const selectAllPosts = state => state.posts.posts
 
 export const selectPostById = (state, postId) =>
-  state.posts.posts.find((post) => post.id === postId)
+  state.posts.posts.find(post => post.id === postId)
+
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state, userId) => userId],
+  (posts, userId) => posts.filter(post => post.user === userId)
+)
